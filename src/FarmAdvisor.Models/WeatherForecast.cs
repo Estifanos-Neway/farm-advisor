@@ -1,4 +1,4 @@
-namespace FarmAdvisor;
+namespace FarmAdvisor.Models;
 
 public class WeatherForecast
 {

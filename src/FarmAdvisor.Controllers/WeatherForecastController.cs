@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace FarmAdvisor.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
+using FarmAdvisor.Models;
 
 [ApiController]
 [Route("[controller]")]
