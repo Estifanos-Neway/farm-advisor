@@ -17,20 +17,20 @@ namespace FarmAdvisor.DataAccess.MSSQL
             return user;
         }
 
-        public User? getById(string userId)
+        public User? getById(Guid userId)
         {
-            var users = _dbContext.Users.Where(user => user.userId.ToString() == userId);
+            var users = _dbContext.Users.Where(user => user.UserId == userId);
             return users.FirstOrDefault();
         }
 
         public User? getByPhone(string phone)
         {
-            var users = _dbContext.Users.Where(user => user.phone == phone);
+            var users = _dbContext.Users.Where(user => user.Phone == phone);
             return users.FirstOrDefault();
         }
 
         public User? getByCredentials(string phone, string passwordHash){
-            var users = _dbContext.Users.Where(user => user.phone == phone).Where(user => user.passwordHash == passwordHash);
+            var users = _dbContext.Users.Where(user => user.Phone == phone).Where(user => user.PasswordHash == passwordHash);
             return users.FirstOrDefault();
         }
     }

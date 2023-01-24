@@ -12,6 +12,7 @@ using System.Security.Claims;
 namespace FarmAdvisor.Controllers
 {
     [ApiController]
+    [Route("users")]
     public class UserController : ControllerBase
     {
 
@@ -99,13 +100,13 @@ namespace FarmAdvisor.Controllers
                 }
                 User user = new User()
                 {
-                    name = userSignupVerificationInput.name,
-                    phone = phone,
-                    email = userSignupVerificationInput.email,
-                    passwordHash = userSignupVerificationInput.passwordHash
+                    Name = userSignupVerificationInput.name,
+                    Phone = phone,
+                    Email = userSignupVerificationInput.email,
+                    PasswordHash = userSignupVerificationInput.passwordHash
                 };
                 userDataAccess.addUser(user);
-                UserLogin? userLogin = jwtAuthenticationController.Authenticate(user.phone, user.passwordHash);
+                UserLogin? userLogin = jwtAuthenticationController.Authenticate(user.Phone, user.PasswordHash);
                 return Ok(userLogin);
             }
             catch (Exception e)
@@ -140,13 +141,13 @@ namespace FarmAdvisor.Controllers
         {
             try
             {
-                string? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
+                Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
                 if (userId != null)
                 {
-                    User? user = userDataAccess.getById(userId);
+                    User? user = userDataAccess.getById((Guid)userId);
                     if (user != null)
                     {
-                        user.passwordHash = null;
+                        user.PasswordHash = null;
                         return Ok(user);
                     }
                 }

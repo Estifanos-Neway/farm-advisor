@@ -30,7 +30,7 @@ namespace FarmAdvisor.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Actor, user.userId.ToString()!),
+                    new Claim(ClaimTypes.Actor, user.UserId.ToString()!),
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
 
@@ -40,22 +40,22 @@ namespace FarmAdvisor.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             UserLogin userLogin = new UserLogin(){
-                userId = user.userId,
-                name = user.name,
-                phone = user.phone,
-                email = user.email,
+                userId = user.UserId,
+                name = user.Name,
+                phone = user.Phone,
+                email = user.Email,
                 accessToken = tokenHandler.WriteToken(token)
             };
             return userLogin;
         }
         
-        public string? getCurrentUserId(HttpContext httpContext)
+        public Guid? getCurrentUserId(HttpContext httpContext)
         {
             var identity = httpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
             {
                 var userClaims = identity.Claims;
-                return userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Actor)?.Value;
+                return new Guid(userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Actor)?.Value!);
             }
             return null;
         }
