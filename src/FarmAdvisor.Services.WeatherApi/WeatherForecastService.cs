@@ -35,7 +35,7 @@ namespace FarmAdvisor.Services.WeatherApi
                         }
                         public class NextHoursDetails
                         {
-                            public string symbol_code = null!;
+                            public double precipitation_amount;
                         }
                         public NextHoursSummary summary = null!;
                         public NextHoursDetails? details;
@@ -68,6 +68,7 @@ namespace FarmAdvisor.Services.WeatherApi
             string lastDate = forecastApiResponse.properties.timeseries[0].time.Split('T')[0];
             int index = 0;
             double temperatureSum = 0;
+            double precipitationSum = 0;
             double tMin = forecastApiResponse.properties.timeseries[0].data.instant.details.air_temperature;
             double tMax = tMin;
             int timesCount = 0;
@@ -81,18 +82,25 @@ namespace FarmAdvisor.Services.WeatherApi
                     {
                         Date = lastDate,
                         averageTemperature = temperatureSum / timesCount,
+                        averagePrecipitation = precipitationSum / timesCount,
                         GDD = Utils.getGdd(tMin, tMax, baseTemperature)
                     });
                     index++;
                     if (index == 8)
                         break;
                     temperatureSum = 0;
+                    precipitationSum = 0;
                     timesCount = 0;
                     tMin = thisTemperature;
                     tMax = tMin;
                     lastDate = thisDate;
                 }
-                temperatureSum += timeSeriesMember.data.instant.details.air_temperature;
+                temperatureSum += thisTemperature;
+                try
+                {
+                    precipitationSum += timeSeriesMember.data.next_6_hours!.details!.precipitation_amount;
+                }
+                catch (Exception) { }
                 timesCount++;
                 if (thisTemperature < tMin)
                     tMin = thisTemperature;

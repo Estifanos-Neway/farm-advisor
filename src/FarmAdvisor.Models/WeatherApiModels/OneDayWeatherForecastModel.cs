@@ -4,6 +4,7 @@ namespace FarmAdvisor.Models
     {
         public string Date { get; set; } = null!;
         public double averageTemperature { get; set; }
+        public double averagePrecipitation { get; set; }
         public double GDD { get; set; }
     }
 }
