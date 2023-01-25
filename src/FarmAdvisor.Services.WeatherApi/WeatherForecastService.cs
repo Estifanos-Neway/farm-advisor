@@ -1,8 +1,6 @@
 using Newtonsoft.Json;
-// using static System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using FarmAdvisor.Models;
+using FarmAdvisor.Commons;
 
 namespace FarmAdvisor.Services.WeatherApi
 {
@@ -11,14 +9,14 @@ namespace FarmAdvisor.Services.WeatherApi
     {
         public class Properties
         {
-            public class TimeSeriesPoint
+            public class TimeSeriesMember
             {
 
-                public class TimeSeriesPointData
+                public class TimeSeriesMemberData
                 {
-                    public class TimeSeriesPointDataInstant
+                    public class TimeSeriesMemberDataInstant
                     {
-                        public class TimeSeriesPointDataInstantDetails
+                        public class TimeSeriesMemberDataInstantDetails
                         {
                             public double air_pressure_at_sea_level;
                             public double air_temperature;
@@ -27,7 +25,7 @@ namespace FarmAdvisor.Services.WeatherApi
                             public double wind_from_direction;
                             public double wind_speed;
                         }
-                        public TimeSeriesPointDataInstantDetails details = null!;
+                        public TimeSeriesMemberDataInstantDetails details = null!;
                     }
                     public class NextHours
                     {
@@ -42,15 +40,15 @@ namespace FarmAdvisor.Services.WeatherApi
                         public NextHoursSummary summary = null!;
                         public NextHoursDetails? details;
                     }
-                    public TimeSeriesPointDataInstant instant = null!;
+                    public TimeSeriesMemberDataInstant instant = null!;
                     public NextHours? next_12_hours;
                     public NextHours? next_1_hours;
                     public NextHours? next_6_hours;
                 }
                 public string time = null!;
-                public TimeSeriesPointData data = null!;
+                public TimeSeriesMemberData data = null!;
             }
-            public TimeSeriesPoint[] timeseries = null!;
+            public TimeSeriesMember[] timeseries = null!;
         }
         public Properties properties = null!;
     }
@@ -62,15 +60,45 @@ namespace FarmAdvisor.Services.WeatherApi
 
             client.DefaultRequestHeaders.Add("User-Agent", "C# program");
         }
-        public async Task<List<OneDayWeatherForecast>> getForecastAsync(int altitude, double latitude, double longitude)
+        public async Task<List<OneDayWeatherForecast>> getForecastAsync(int altitude, double latitude, double longitude, double baseTemperature)
         {
-            var fetchedForecast = await client.GetStringAsync(" https://api.met.no/weatherapi/locationforecast/2.0/compact?altitude=" + altitude + "&lat=" + latitude + "&lon=" + longitude);
-            ForecastApiResponse fetchedForecastJson = JsonConvert.DeserializeObject<ForecastApiResponse>(fetchedForecast)!;
+            string forecastApiResponseJson = await client.GetStringAsync(" https://api.met.no/weatherapi/locationforecast/2.0/compact?altitude=" + altitude + "&lat=" + latitude + "&lon=" + longitude);
+            ForecastApiResponse forecastApiResponse = JsonConvert.DeserializeObject<ForecastApiResponse>(forecastApiResponseJson)!;
             List<OneDayWeatherForecast> forecasts = new List<OneDayWeatherForecast>();
-            forecasts.Add(new OneDayWeatherForecast()
+            string lastDate = forecastApiResponse.properties.timeseries[0].time.Split('T')[0];
+            int index = 0;
+            double temperatureSum = 0;
+            double tMin = forecastApiResponse.properties.timeseries[0].data.instant.details.air_temperature;
+            double tMax = tMin;
+            int timesCount = 0;
+            foreach (ForecastApiResponse.Properties.TimeSeriesMember timeSeriesMember in forecastApiResponse.properties.timeseries)
             {
-                Date = fetchedForecastJson.properties.timeseries[0].data.next_6_hours!.summary.symbol_code
-            });
+                string thisDate = timeSeriesMember.time.Split('T')[0];
+                double thisTemperature = timeSeriesMember.data.instant.details.air_temperature;
+                if (thisDate != lastDate)
+                {
+                    forecasts.Add(new OneDayWeatherForecast()
+                    {
+                        Date = lastDate,
+                        averageTemperature = temperatureSum / timesCount,
+                        GDD = Utils.getGdd(tMin, tMax, baseTemperature)
+                    });
+                    index++;
+                    if (index == 8)
+                        break;
+                    temperatureSum = 0;
+                    timesCount = 0;
+                    tMin = thisTemperature;
+                    tMax = tMin;
+                    lastDate = thisDate;
+                }
+                temperatureSum += timeSeriesMember.data.instant.details.air_temperature;
+                timesCount++;
+                if (thisTemperature < tMin)
+                    tMin = thisTemperature;
+                else if (thisTemperature > tMax)
+                    tMax = thisTemperature;
+            }
             return forecasts;
         }
     }
