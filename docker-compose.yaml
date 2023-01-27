@@ -3,6 +3,7 @@ version: '3.1'
 services:
   app:
     container_name: farm_advisor
+    # image: estifanosn/farm-advisor
     build: .
     restart: always
     ports:

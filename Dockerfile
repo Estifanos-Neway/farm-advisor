@@ -9,9 +9,6 @@ RUN dotnet restore
 # copy everything else and build app
 COPY src/. .
 RUN dotnet publish -c Release -o /app
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "FarmAdvisor.dll"]
+RUN dotnet tool install -g dotnet-ef
+RUN $HOME/.dotnet/tools/dotnet-ef migrations add CreateTables
+ENTRYPOINT ["dotnet", "/app/FarmAdvisor.dll"]
