@@ -45,6 +45,7 @@ jobs:
         shell: powershell
         run: |
           dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
           dotnet sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build build.proj --no-incremental
           dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
