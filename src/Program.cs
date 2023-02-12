@@ -44,23 +44,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapGet("/", () => "All Good!");
-// FarmAdvisorDbContext farmAdvisorDbContext = new FarmAdvisorDbContext();
-// while (true)
-// {
-//     try
-//     {
-//         if (farmAdvisorDbContext.Database.GetPendingMigrations().Any())
-//         {
-//             Console.WriteLine("Populating db!");
-//             farmAdvisorDbContext.Database.Migrate();
-//             break;
-//         }
-//     }
-//     catch (Exception e)
-//     {
-//         Console.WriteLine(e);
-//         Console.WriteLine("Waiting the db...");
-//     }
-// }
 
 app.Run();
