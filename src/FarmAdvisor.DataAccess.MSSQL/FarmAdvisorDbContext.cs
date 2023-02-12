@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FarmAdvisor.Models;
+using System;
+using System.IO;
 
 namespace FarmAdvisor.DataAccess.MSSQL;
 
@@ -14,6 +16,9 @@ public class FarmAdvisorDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=0.0.0.0,5500;Database=FarmAdvisor;User Id=SA;Password=Pass_Word;MultipleActiveResultSets=true;TrustServerCertificate=true");
+        Console.WriteLine("connectionString");
+        string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")!;
+        Console.WriteLine(connectionString);
+        optionsBuilder.UseSqlServer(connectionString);
     }
 }
