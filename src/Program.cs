@@ -2,8 +2,6 @@ using FarmAdvisor.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FarmAdvisor.DataAccess.MSSQL;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +43,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/", () => "All Good!");
 // FarmAdvisorDbContext farmAdvisorDbContext = new FarmAdvisorDbContext();
 // while (true)
 // {
