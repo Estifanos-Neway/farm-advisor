@@ -1,6 +1,10 @@
+.\.sonar\scanner\dotnet-sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /o:"estifanos-neway" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+dotnet build build.proj
+.\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          
 dotnet tool install --global dotnet-coverage
 dotnet tool install --global dotnet-sonarscanner
-dotnet sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /d:sonar.login="d78bfec83e3e015baf6031a03a79407d7ca3ae4f" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+dotnet sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /o:"estifanos-neway" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 dotnet build build.proj --no-incremental
 dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
 dotnet sonarscanner end /d:sonar.login="d78bfec83e3e015baf6031a03a79407d7ca3ae4f"
