@@ -20,3 +20,5 @@ dotnet tool install --global JetBrains.dotCover.GlobalTool
 dotnet build build.proj --no-incremental
 dotnet dotcover test --dcReportType=HTML
 .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+sqp_be927db37c9c0ee95c083ac9b0bae9bec166f566
