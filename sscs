@@ -2,3 +2,9 @@ dotnet sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /d:sonar.login="${{ 
 dotnet build build.proj --no-incremental
 dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
 dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+
+SonarScanner.MSBuild.exe begin /k:"Estifanos-Neway_farm-advisor" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" 
+dotnet build build.proj --no-incremental
+dotnet test --collect "Code Coverage"
+SonarScanner.MSBuild.exe end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
