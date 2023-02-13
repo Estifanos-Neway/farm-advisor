@@ -49,8 +49,10 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           dotnet tool install -g dotnet-ef
           dotnet sonarscanner begin /k:"Estifanos-Neway_farm-advisor" /o:"estifanos-neway" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet build build.proj  --no-incremental
+          cd src
+          dotnet build --no-incremental
           dotnet ef migrations add CreateTables
           dotnet ef database update
+          cd ../
           dotnet coverage collect "dotnet test" -f xml -o "coverage.xml"
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
