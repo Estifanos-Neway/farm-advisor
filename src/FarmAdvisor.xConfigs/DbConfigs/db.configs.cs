@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-
 namespace FarmAdvisor.Commons;
 public static class DbCommons
 {

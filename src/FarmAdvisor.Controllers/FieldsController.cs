@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FarmAdvisor.Models;
 using FarmAdvisor.DataAccess.MSSQL;
-
 namespace FarmAdvisor.Controllers
 {
     [ApiController]
@@ -10,7 +9,6 @@ namespace FarmAdvisor.Controllers
     [Route("fields")]
     public class FieldsController : ControllerBase
     {
-
         private readonly JwtAuthenticationController jwtAuthenticationController;
         private readonly FieldDataAccess fieldDataAccess;
         private readonly FarmDataAccess farmDataAccess;
@@ -22,14 +20,12 @@ namespace FarmAdvisor.Controllers
             this.farmDataAccess = new FarmDataAccess();
             this.sensorDataAccess = new SensorDataAccess();
         }
-
         [HttpPost]
         public IActionResult postField([FromBody] Field field)
         {
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Farm? farm = farmDataAccess.getByUserAndFarmId((Guid)userId!, field.FarmId);
                 if (farm == null)
                     return NotFound("Farm_Not_Found");
@@ -43,7 +39,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{fieldId?}")]
         public IActionResult getField(Guid fieldId)
@@ -51,7 +46,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Field? field = fieldDataAccess.getByUserAndFieldId((Guid)userId!, fieldId);
                 if (field == null)
                 {
@@ -65,7 +59,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpPatch]
         [Route("{fieldId?}")]
         public IActionResult patchField(Guid fieldId, FieldUpdate fieldUpdates)
@@ -73,7 +66,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Field? field = fieldDataAccess.updateByUserAndFieldId((Guid)userId!, fieldId, fieldUpdates);
                 if (field == null)
                 {
@@ -87,7 +79,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpDelete]
         [Route("{fieldId?}")]
         public IActionResult deleteField(Guid fieldId)
@@ -95,7 +86,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Field? field = fieldDataAccess.deleteByUserAndFieldId((Guid)userId!, fieldId);
                 if (field == null)
                 {

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FarmAdvisor.Models;
 using FarmAdvisor.DataAccess.MSSQL;
-
 namespace FarmAdvisor.Controllers
 {
     [ApiController]
@@ -10,7 +9,6 @@ namespace FarmAdvisor.Controllers
     [Route("farms")]
     public class FarmsController : ControllerBase
     {
-
         private readonly JwtAuthenticationController jwtAuthenticationController;
         private readonly FarmDataAccess farmDataAccess;
         private readonly FieldDataAccess fieldDataAccess;
@@ -22,7 +20,6 @@ namespace FarmAdvisor.Controllers
             this.fieldDataAccess = new FieldDataAccess();
             this.sensorDataAccess = new SensorDataAccess();
         }
-
         [HttpPost]
         public IActionResult postFarm([FromBody] Farm farm)
         {
@@ -39,7 +36,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         public IActionResult getFarms()
         {
@@ -48,7 +44,6 @@ namespace FarmAdvisor.Controllers
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
                 Farm[] farms = farmDataAccess.getByUserId((Guid)userId!);
                 return Ok(farms);
-
             }
             catch (Exception e)
             {
@@ -56,7 +51,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{farmId?}")]
         public IActionResult getFarm(Guid farmId)
@@ -77,7 +71,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpPatch]
         [Route("{farmId?}")]
         public IActionResult patchFarm(Guid farmId, FarmUpdate farmUpdates)
@@ -98,7 +91,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpDelete]
         [Route("{farmId?}")]
         public IActionResult deleteFarm(Guid farmId)
@@ -119,7 +111,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{farmId?}/fields")]
         public IActionResult getFields(Guid farmId)
@@ -135,7 +126,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{farmId?}/notifications")]
         public IActionResult getNotifications(Guid farmId)

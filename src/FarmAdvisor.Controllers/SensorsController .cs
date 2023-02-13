@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using FarmAdvisor.Models;
 using FarmAdvisor.DataAccess.MSSQL;
 using FarmAdvisor.Services.WeatherApi;
-
 namespace FarmAdvisor.Controllers
 {
     [ApiController]
@@ -12,7 +11,6 @@ namespace FarmAdvisor.Controllers
     [Route("sensors")]
     public class SensorsController : ControllerBase
     {
-
         private readonly JwtAuthenticationController jwtAuthenticationController;
         private readonly SensorDataAccess sensorDataAccess = new SensorDataAccess();
         private readonly SensorStatisticsDataAccess sensorStatisticsDataAccess = new SensorStatisticsDataAccess();
@@ -23,7 +21,6 @@ namespace FarmAdvisor.Controllers
         {
             this.jwtAuthenticationController = jwtAuthenticationController;
         }
-
         [HttpPost]
         public async Task<IActionResult> postSensorAsync([FromBody] SensorInput sensorInput)
         {
@@ -34,7 +31,6 @@ namespace FarmAdvisor.Controllers
                 if (!Utils.isValidLongitude(sensorInput.Long))
                     return BadRequest("Invalid_Longitude");
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Field? field = fieldDataAccess.getByUserAndFieldId((Guid)userId!, sensorInput.FieldId);
                 if (field == null)
                     return NotFound("Field_Not_Found");
@@ -98,7 +94,6 @@ namespace FarmAdvisor.Controllers
                         averageTemperature = lastTemp,
                         GDD = lastGdd
                     });
-
                     if (!cuttingDateSet && lastGdd > defaultGDD)
                     {
                         double downDt = defaultGDD - lastGdd;
@@ -117,7 +112,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{sensorId?}")]
         public IActionResult getSensor(Guid sensorId)
@@ -125,12 +119,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 return Ok(sensor);
             }
             catch (Exception e)
@@ -139,7 +128,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpPatch]
         [Route("{sensorId?}")]
         public IActionResult patchSensor(Guid sensorId, SensorUpdate sensorUpdates)
@@ -147,12 +135,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId!, sensorId, sensorUpdates);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 return Ok(sensor);
             }
             catch (Exception e)
@@ -161,7 +144,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpDelete]
         [Route("{sensorId?}")]
         public IActionResult deleteSensor(Guid sensorId)
@@ -169,12 +151,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.deleteByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 return Ok(sensor);
             }
             catch (Exception e)
@@ -183,7 +160,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{sensorId?}/statistics")]
         public IActionResult getStatistics(Guid sensorId)
@@ -191,12 +167,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 SensorStatistic[] sensorStatistic = sensorStatisticsDataAccess.getBySensorId(sensorId)!;
                 return Ok(sensorStatistic);
             }
@@ -206,7 +177,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpPost]
         [Route("{sensorId?}/gdd-resets")]
         public IActionResult resetGdd(Guid sensorId, [FromBody] SensorGddResetInput sensorGddResetInput)
@@ -214,12 +184,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 SensorStatistic sensorStatistic = sensorStatisticsDataAccess.getBySensorIdAndDate(sensorId, sensorGddResetInput.resetDate)!;
                 if (sensorStatistic == null)
                     return NotFound("Date_Not_Found");
@@ -237,7 +202,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpGet]
         [Route("{sensorId?}/gdd-resets")]
         public IActionResult getGddResets(Guid sensorId)
@@ -245,12 +209,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 SensorGddReset[] sensorGddResets = sensorGddResetDataAccess.getBySensorId((Guid)sensor.SensorId!);
                 return Ok(sensorGddResets);
             }
@@ -260,7 +219,6 @@ namespace FarmAdvisor.Controllers
                 return StatusCode(500);
             }
         }
-
         [HttpPost]
         [Route("{sensorId?}/trigger")]
         public IActionResult triggerSensor(Guid sensorId)
@@ -268,12 +226,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                if (sensor == null)
-                {
-                    return NotFound("Sensor_Not_Found");
-                }
                 try
                 {
                     SensorStatistic sensorStatistic = sensorStatisticsDataAccess.getBySensorIdAndDate(sensorId, DateTime.UtcNow.Date)!;
