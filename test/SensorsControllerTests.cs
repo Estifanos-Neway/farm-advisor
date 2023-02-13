@@ -18,7 +18,7 @@ namespace FarmAdvisor.Test
         private static Guid? FarmId;
         private static Guid? FieldId;
         private static Guid? SensorId;
-        private static string phone = "0963654322";
+        private static string phone = "0963100000";
         public SensorsControllerTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
