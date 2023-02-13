@@ -19,7 +19,6 @@ public static class Utils
     }
     public static bool isValidLongitude(double number)
     {
-        // LoadTester.test();
         return number >= -180 && number <= 180;
     }
     public static double getGdd(double tMin, double tMax, double tBase)

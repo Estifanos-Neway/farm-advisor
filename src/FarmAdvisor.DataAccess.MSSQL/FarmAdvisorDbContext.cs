@@ -15,6 +15,6 @@ public class FarmAdvisorDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Server=localhost,5500;Database=FarmAdvisor;User Id=SA;Password="+DbCommons.getPassWord()+";MultipleActiveResultSets=true;TrustServerCertificate=true");
+        optionsBuilder.UseSqlServer("Server=localhost,5500;Database=FarmAdvisor;User Id=SA;Password="+DbCommons.getPassWord+";MultipleActiveResultSets=true;TrustServerCertificate=true");
     }
 }
