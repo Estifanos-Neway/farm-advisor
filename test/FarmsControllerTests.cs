@@ -16,7 +16,7 @@ namespace FarmAdvisor.Test
         private HttpClient _httpClient;
         private static string accessToken = "";
         private static Guid? FarmId;
-        private static string phone = "0963000001";
+        private static string phone = "0963000002";
         public FarmsControllerTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
@@ -146,6 +146,18 @@ namespace FarmAdvisor.Test
             var stringResult = await response.Content.ReadAsStringAsync();
             FarmNotification[] farmNotifications = JsonConvert.DeserializeObject<FarmNotification[]>(stringResult)!;
             Assert.IsTrue(farmNotifications.Length == 0);
+        }
+
+        [TestMethod]
+        public async Task DeleteFarm_ReturnsValidFarm()
+        {
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + FarmsControllerTests.accessToken);
+            var response = await _httpClient.DeleteAsync("/farms/" + FarmsControllerTests.FarmId);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var stringResult = await response.Content.ReadAsStringAsync();
+            Farm farm = JsonConvert.DeserializeObject<Farm>(stringResult)!;
+            Assert.IsTrue(farm.FarmId == FarmsControllerTests.FarmId);
         }
     }
 }

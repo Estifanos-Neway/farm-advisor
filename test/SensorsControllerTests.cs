@@ -18,7 +18,7 @@ namespace FarmAdvisor.Test
         private static Guid? FarmId;
         private static Guid? FieldId;
         private static Guid? SensorId;
-        private static string phone = "0963100003";
+        private static string phone = "0963100004";
         public SensorsControllerTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
@@ -225,6 +225,18 @@ namespace FarmAdvisor.Test
             Assert.AreEqual(HttpStatusCode.OK, sensorUpdateResponse.StatusCode);
             var stringResult = await sensorUpdateResponse.Content.ReadAsStringAsync();
             SensorGddReset sensor = JsonConvert.DeserializeObject<SensorGddReset>(stringResult)!;
+            Assert.IsTrue(sensor.SensorId == SensorsControllerTests.SensorId);
+        }
+
+        [TestMethod]
+        public async Task DeleteSensor_ReturnsValidSensor()
+        {
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + SensorsControllerTests.accessToken);
+            var response = await _httpClient.DeleteAsync("/sensors/" + SensorsControllerTests.SensorId);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var stringResult = await response.Content.ReadAsStringAsync();
+            Sensor sensor = JsonConvert.DeserializeObject<Sensor>(stringResult)!;
             Assert.IsTrue(sensor.SensorId == SensorsControllerTests.SensorId);
         }
     }

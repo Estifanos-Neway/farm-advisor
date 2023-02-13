@@ -29,10 +29,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
                 farm.UserId = userId;
                 farm = farmDataAccess.add(farm);
                 return Ok(farm);
@@ -50,15 +46,9 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
-                else
-                {
-                    Farm[] farms = farmDataAccess.getByUserId((Guid)userId);
-                    return Ok(farms);
-                }
+                Farm[] farms = farmDataAccess.getByUserId((Guid)userId!);
+                return Ok(farms);
+
             }
             catch (Exception e)
             {
@@ -74,11 +64,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
-                Farm? farm = farmDataAccess.getByUserAndFarmId((Guid)userId, farmId);
+                Farm? farm = farmDataAccess.getByUserAndFarmId((Guid)userId!, farmId);
                 if (farm == null)
                 {
                     return NotFound("Farm_Not_Found");
@@ -99,11 +85,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
-                Farm? farm = farmDataAccess.updateByUserAndFarmId((Guid)userId, farmId, farmUpdates);
+                Farm? farm = farmDataAccess.updateByUserAndFarmId((Guid)userId!, farmId, farmUpdates);
                 if (farm == null)
                 {
                     return NotFound("Farm_Not_Found");
@@ -124,11 +106,7 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
-                Farm? farm = farmDataAccess.deleteByUserAndFarmId((Guid)userId, farmId);
+                Farm? farm = farmDataAccess.deleteByUserAndFarmId((Guid)userId!, farmId);
                 if (farm == null)
                 {
                     return NotFound("Farm_Not_Found");
@@ -149,10 +127,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
                 Field[]? fields = fieldDataAccess.getByFarmId(farmId);
                 return Ok(fields);
             }
@@ -170,10 +144,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                if (userId == null)
-                {
-                    return NotFound("User_Not_Found");
-                }
                 Field[]? fields = fieldDataAccess.getByFarmId(farmId);
                 List<FarmNotification> notifications = new List<FarmNotification>();
                 foreach (Field field in fields)
