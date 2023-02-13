@@ -49,7 +49,7 @@ namespace FarmAdvisor.Test
             var stringResult = await response.Content.ReadAsStringAsync();
             UserSignupVerification userSignupVerification = JsonConvert.DeserializeObject<UserSignupVerification>(stringResult)!;
             Assert.IsTrue(userSignupVerification.userSignVerificationToken is string);
-            this.userSignupVerificationToken = userSignupVerification.userSignVerificationToken;
+            UsersControllerTests.userSignupVerificationToken = userSignupVerification.userSignVerificationToken;
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace FarmAdvisor.Test
         {
             UserSignupVerificationInput userSignupVerificationInput = new UserSignupVerificationInput()
             {
-                userSignVerificationToken = this.userSignupVerificationToken,
+                userSignVerificationToken = UsersControllerTests.userSignupVerificationToken,
                 userSignVerificationCode = "invalid",
                 name = "Test Name",
                 email = "test@test.test",
@@ -89,7 +89,7 @@ namespace FarmAdvisor.Test
             var response = await _httpClient.PostAsync("/users/signup/verify", userSignupContent);
             var stringResult = await response.Content.ReadAsStringAsync();
 
-            Assert.AreEqual("Invalid_Token", stringResult);
+            Assert.AreEqual("Invalid_Verification_Code", stringResult);
         }
 
         // [TestMethod]
