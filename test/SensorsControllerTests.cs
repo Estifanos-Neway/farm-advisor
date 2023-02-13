@@ -18,7 +18,7 @@ namespace FarmAdvisor.Test
         private static Guid? FarmId;
         private static Guid? FieldId;
         private static Guid? SensorId;
-        private static string phone = "0963100002";
+        private static string phone = "0963100003";
         public SensorsControllerTests()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
@@ -108,7 +108,7 @@ namespace FarmAdvisor.Test
             {
                 FieldId = (Guid)SensorsControllerTests.FieldId!,
                 SerialNo = "TSerialNo",
-                GDD = 80,
+                GDD = 320,
                 DefaultGDD = 230,
                 Long = 80,
                 Lat = 80,
@@ -189,6 +189,18 @@ namespace FarmAdvisor.Test
             Assert.IsTrue(sensor.SensorId == SensorsControllerTests.SensorId);
         }
 
+
+        [TestMethod]
+        public async Task GetFarmNotifications_ReturnsValidFarmNotifications()
+        {
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + SensorsControllerTests.accessToken);
+            var response = await _httpClient.GetAsync("/farms/" + SensorsControllerTests.FarmId + "/notifications");
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var stringResult = await response.Content.ReadAsStringAsync();
+            FarmNotification[] farmNotifications = JsonConvert.DeserializeObject<FarmNotification[]>(stringResult)!;
+            Assert.IsTrue(farmNotifications.Length != 0);
+        }
 
         [TestMethod]
         public async Task GetSensorResets_ReturnsValidSensorResets()
