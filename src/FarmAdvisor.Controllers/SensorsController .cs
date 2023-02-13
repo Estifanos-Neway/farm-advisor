@@ -167,7 +167,6 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 SensorStatistic[] sensorStatistic = sensorStatisticsDataAccess.getBySensorId(sensorId)!;
                 return Ok(sensorStatistic);
             }
@@ -210,7 +209,7 @@ namespace FarmAdvisor.Controllers
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
                 Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
-                SensorGddReset[] sensorGddResets = sensorGddResetDataAccess.getBySensorId((Guid)sensor.SensorId!);
+                SensorGddReset[] sensorGddResets = sensorGddResetDataAccess.getBySensorId((Guid)sensor!.SensorId!);
                 return Ok(sensorGddResets);
             }
             catch (Exception e)
