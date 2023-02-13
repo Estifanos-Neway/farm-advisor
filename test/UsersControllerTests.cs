@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FarmAdvisor.Models;
 using System.Text;
 using Newtonsoft.Json;
-using System;
 
 namespace FarmAdvisor.Test
 {
@@ -72,5 +71,45 @@ namespace FarmAdvisor.Test
 
             Assert.AreEqual("Invalid_Token", stringResult);
         }
+
+        [TestMethod]
+        public async Task UsersSignUpVerify_InvalidVerificationCode_ReturnsInvalid_Verification_Code()
+        {
+            UserSignupVerificationInput userSignupVerificationInput = new UserSignupVerificationInput()
+            {
+                userSignVerificationToken = userSignupVerificationToken,
+                userSignVerificationCode = "invalid",
+                name = "Test Name",
+                email = "test@test.test",
+                passwordHash = "pwh"
+            };
+
+            HttpContent userSignupContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(userSignupVerificationInput), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/users/signup/verify", userSignupContent);
+            var stringResult = await response.Content.ReadAsStringAsync();
+
+            Assert.AreEqual("Invalid_Verification_Code", stringResult);
+        }
+
+        // [TestMethod]
+        // public async Task UsersSignUpVerify_ValidUserSignupVerificationInput_ReturnsInvalid_Verification_Code()
+        // {
+        //     UserSignupVerificationInput userSignupVerificationInput = new UserSignupVerificationInput()
+        //     {
+        //         userSignVerificationToken = userSignupVerificationToken,
+        //         userSignVerificationCode = "invalid",
+        //         name = "Test Name",
+        //         email = "test@test.test",
+        //         passwordHash = "pwh"
+        //     };
+
+        //     HttpContent userSignupContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(userSignupVerificationInput), Encoding.UTF8, "application/json");
+
+        //     var response = await _httpClient.PostAsync("/users/signup/verify", userSignupContent);
+        //     var stringResult = await response.Content.ReadAsStringAsync();
+
+        //     Assert.AreEqual("Invalid_Verification_Code", stringResult);
+        // }
     }
 }
