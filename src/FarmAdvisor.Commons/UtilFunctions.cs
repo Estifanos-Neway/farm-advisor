@@ -27,7 +27,7 @@ public static class Utils
     }
     public static double[] getIncPattern(List<double> list)
     {
-        int incPatternLength = list.Count -1;
+        int incPatternLength = list.Count - 1;
         double[] dt = new double[incPatternLength];
         int minus = (int)Math.Floor((double)incPatternLength / 2);
         int plus = (int)Math.Ceiling((double)incPatternLength / 2);

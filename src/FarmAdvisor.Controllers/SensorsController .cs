@@ -34,8 +34,8 @@ namespace FarmAdvisor.Controllers
                 if (!Utils.isValidLongitude(sensorInput.Long))
                     return BadRequest("Invalid_Longitude");
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Field? field = fieldDataAccess.getByUserAndFieldId((Guid)userId, sensorInput.FieldId);
+
+                Field? field = fieldDataAccess.getByUserAndFieldId((Guid)userId!, sensorInput.FieldId);
                 if (field == null)
                     return NotFound("Field_Not_Found");
                 Sensor sensor = new Sensor()
@@ -125,8 +125,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -147,8 +147,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId, sensorId, sensorUpdates);
+
+                Sensor? sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId!, sensorId, sensorUpdates);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -169,8 +169,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.deleteByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.deleteByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -191,8 +191,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -214,8 +214,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -223,7 +223,7 @@ namespace FarmAdvisor.Controllers
                 SensorStatistic sensorStatistic = sensorStatisticsDataAccess.getBySensorIdAndDate(sensorId, sensorGddResetInput.resetDate)!;
                 if (sensorStatistic == null)
                     return NotFound("Date_Not_Found");
-                sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId, sensorId, new SensorUpdate() { GDD = sensorStatistic.GDD });
+                sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId!, sensorId, new SensorUpdate() { GDD = sensorStatistic.GDD });
                 SensorGddReset sensorGddReset = sensorGddResetDataAccess.add(new SensorGddReset()
                 {
                     SensorId = (Guid)sensor!.SensorId!,
@@ -245,8 +245,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -268,8 +268,8 @@ namespace FarmAdvisor.Controllers
             try
             {
                 Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-                
-                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId, sensorId);
+
+                Sensor? sensor = sensorDataAccess.getByUserAndSensorId((Guid)userId!, sensorId);
                 if (sensor == null)
                 {
                     return NotFound("Sensor_Not_Found");
@@ -277,7 +277,7 @@ namespace FarmAdvisor.Controllers
                 try
                 {
                     SensorStatistic sensorStatistic = sensorStatisticsDataAccess.getBySensorIdAndDate(sensorId, DateTime.UtcNow.Date)!;
-                    sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId, sensorId, new SensorUpdate() { GDD = sensorStatistic.GDD });
+                    sensor = sensorDataAccess.updateByUserAndSensorId((Guid)userId!, sensorId, new SensorUpdate() { GDD = sensorStatistic.GDD });
                 }
                 catch (Exception e)
                 {

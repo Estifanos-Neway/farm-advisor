@@ -115,8 +115,6 @@ namespace FarmAdvisor.Controllers
         {
             try
             {
-                Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
-
                 Sensor[]? sensors = sensorDataAccess.getByFieldId(fieldId);
                 return Ok(sensors);
             }

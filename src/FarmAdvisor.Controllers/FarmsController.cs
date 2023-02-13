@@ -126,7 +126,6 @@ namespace FarmAdvisor.Controllers
         {
             try
             {
-                Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
                 Field[]? fields = fieldDataAccess.getByFarmId(farmId);
                 return Ok(fields);
             }
@@ -143,7 +142,6 @@ namespace FarmAdvisor.Controllers
         {
             try
             {
-                Guid? userId = jwtAuthenticationController.getCurrentUserId(HttpContext);
                 Field[]? fields = fieldDataAccess.getByFarmId(farmId);
                 List<FarmNotification> notifications = new List<FarmNotification>();
                 foreach (Field field in fields)
